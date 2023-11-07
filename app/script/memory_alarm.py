@@ -5,8 +5,10 @@ import requests
 import time
 
 from constants import (
+    API_URL,
     INTERVAL_FOR_CHECKING_MEMORY_IN_SECONDS,
-    MEMORY_ALARM_CRITICAL_PERCENT
+    MEMORY_ALARM_CRITICAL_PERCENT,
+    MEMORY_ERROR
 )
 
 
@@ -34,7 +36,11 @@ def main():
             current_memory_usage = get_memory_usage_percent()
             if current_memory_usage > MEMORY_ALARM_CRITICAL_PERCENT:
                 print('alarm!')
-                # response = requests.get('http://your-api-url')
+                response = requests.post(API_URL, json=MEMORY_ERROR)
+                print(
+                    'Создано предупреждение. Статус код: '
+                    f'{response.status_code}'
+                )
             time.sleep(INTERVAL_FOR_CHECKING_MEMORY_IN_SECONDS)
     except KeyboardInterrupt:
         print('Работа скрипта прервана вручную')
